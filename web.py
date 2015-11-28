@@ -20,7 +20,7 @@ else:
     app.config.setdefault('GITHUB_USERNAME', os.environ.get('GITHUB_USERNAME'))
     app.config.setdefault('GITHUB_ORGS', os.environ.get('GITHUB_ORGS'))
     app.config.setdefault('GITHUB_CLIENT_ID', os.environ.get('GITHUB_CLIENT_ID'))
-    app.config.setdefault('GITHUB_CLIENT_SECRET',) os.environ.get('GITHUB_CLIENT_SECRET'))
+    app.config.setdefault('GITHUB_CLIENT_SECRET', os.environ.get('GITHUB_CLIENT_SECRET'))
     app.config.setdefault('GITHUB_OAUTH_TOKEN', os.environ.get('GITHUB_OAUTH_TOKEN'))
 
 github = GitHub(app)
