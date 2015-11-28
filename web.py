@@ -5,13 +5,24 @@ from datetime import datetime
 import pytz
 from icalendar import Calendar, Event, vCalAddress, vText
 
-from flask import Flask
+from flask import Flask, Response, render_template
+
 from flask.ext.github import GitHub
 from flask.ext.dotenv import DotEnv
 
 app = Flask(__name__)
 
-env = DotEnv(app)
+if os.path.exists(os.path.join(os.getcwd(), ".env")):
+    env = DotEnv(app)
+else:
+    app.config.setdefault('AUTH_USERNAME', os.environ.get('AUTH_USERNAME'))
+    app.config.setdefault('AUTH_PASSWORD', os.environ.get('AUTH_PASSWORD'))
+    app.config.setdefault('GITHUB_USERNAME', os.environ.get('GITHUB_USERNAME'))
+    app.config.setdefault('GITHUB_ORGS', os.environ.get('GITHUB_ORGS'))
+    app.config.setdefault('GITHUB_CLIENT_ID', os.environ.get('GITHUB_CLIENT_ID'))
+    app.config.setdefault('GITHUB_CLIENT_SECRET',) os.environ.get('GITHUB_CLIENT_SECRET'))
+    app.config.setdefault('GITHUB_OAUTH_TOKEN', os.environ.get('GITHUB_OAUTH_TOKEN'))
+
 github = GitHub(app)
 
 from auth import requires_auth
@@ -29,7 +40,7 @@ def index():
 @requires_auth
 def ics_file():
     cal = Calendar()
-    cal.add('prodid', '-//GitHub Milestone ICS Feed//github.com//')
+    cal.add('prodid', '-//GitHub Milestone ICS Feed//herokuapp.com//')
     cal.add('version', '2.0')
 
     for milestone in Client(github).milestones():
@@ -42,7 +53,6 @@ def ics_file():
             updated = datetime.strptime(milestone['updated_at'],
                                         '%Y-%m-%dT%H:%M:%SZ')
 
-            print(milestone.get('html_url'))
             name, repo, m = re_url_info.findall(milestone.get('html_url'))[0]
 
             event = Event()
@@ -66,7 +76,15 @@ def ics_file():
 
             cal.add_component(event)
 
-    return cal.to_ical()
+    mimetype = 'text/x-calendar'
+    headers = {
+        'Content-Disposition': 'attachment;filename=github-calendar.ics'
+    }
+
+    return Response(response=cal.to_ical(),
+                    status=200,
+                    mimetype=mimetype,
+                    headers=headers)
 
 
 @app.route('/login')
