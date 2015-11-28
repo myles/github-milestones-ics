@@ -1,0 +1,36 @@
+{
+  "name": "GitHub Milestones ICS Feed",
+  "description": "A Heroku app to get an iCalendar feed of your GitHub Milestones.",
+  "keywords": [
+    "GitHub",
+    "Milestones",
+    "Calendar",
+    "Productivity"
+  ],
+  "website": "https://github.com/myles/github-milestones-ics",
+  "repository": "https://github.com/myles/github-milestones-ics",
+  "sucess_url": "/login",
+  "env": {
+    "AUTH_USERNAME": {
+      "description": "The username to authenticate the ICS feed.",
+      "required": "true"
+    },
+    "AUTH_PASSWORD": {
+      "description": "The username to authenticate the ICS feed.",,
+      "required": "true",
+      "generator": "secret"
+    },
+    "GITHUB_USERNAME": {
+      "description": "The GitHub user you want to get the milestone data from."
+    },
+    "GITHUB_ORGS": {
+      "description": "The GitHub orgs you want to get the milestone data from (multiple orgs sperated by a comma)."
+    },
+    "GITHUB_CLIENT_ID": {
+      "description": "Your GitHub Client ID"
+    },
+    "GITHUB_CLIENT_SECRET": {
+      "description": "Your GitHub Client Secret"
+    }
+  }
+}

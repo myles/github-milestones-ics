@@ -2,6 +2,8 @@
 
 A Heroku app to get an iCalendar feed of your GitHub Milestones.
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 ## Usage
 
 You will need to add a bunch of Heroku variables.
@@ -26,3 +28,9 @@ Go to `/login` and you will get the `GITHUB_OAUTH_TOKEN` in your `heroku logs`
 Now add that:
 
 	$ heroku config:add GITHUB_OAUTH_TOKEN=1234567890
+
+## Development
+
+	$ mkvirtualenv github-milestones-ics
+	$ pip install -r requirments.txt
+	$ python web.py
