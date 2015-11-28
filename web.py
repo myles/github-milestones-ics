@@ -19,16 +19,20 @@ else:
     app.config.setdefault('AUTH_PASSWORD', os.environ.get('AUTH_PASSWORD'))
     app.config.setdefault('GITHUB_USERNAME', os.environ.get('GITHUB_USERNAME'))
     app.config.setdefault('GITHUB_ORGS', os.environ.get('GITHUB_ORGS'))
-    app.config.setdefault('GITHUB_CLIENT_ID', os.environ.get('GITHUB_CLIENT_ID'))
-    app.config.setdefault('GITHUB_CLIENT_SECRET', os.environ.get('GITHUB_CLIENT_SECRET'))
-    app.config.setdefault('GITHUB_OAUTH_TOKEN', os.environ.get('GITHUB_OAUTH_TOKEN'))
+    app.config.setdefault('GITHUB_CLIENT_ID',
+                          os.environ.get('GITHUB_CLIENT_ID'))
+    app.config.setdefault('GITHUB_CLIENT_SECRET',
+                          os.environ.get('GITHUB_CLIENT_SECRET'))
+    app.config.setdefault('GITHUB_OAUTH_TOKEN',
+                          os.environ.get('GITHUB_OAUTH_TOKEN'))
 
 github = GitHub(app)
 
 from auth import requires_auth
 from client import Client
 
-re_url_info = re.compile('^https://github.com/(?P<name>.*)/(?P<repo>.*)/milestones/(?P<milestone>.*)$')
+re_url_info = re.compile('^https://github.com/(?P<name>.*)/(?P<repo>.*)' +
+                         '/milestones/(?P<milestone>.*)$')
 
 
 @app.route('/')
@@ -56,7 +60,8 @@ def ics_file():
             name, repo, m = re_url_info.findall(milestone.get('html_url'))[0]
 
             event = Event()
-            event.add('summary', "%s/%s - %s" % (name, repo, milestone.get('title')))
+            event.add('summary', "%s/%s - %s" % (name, repo,
+                                                 milestone.get('title')))
             event.add('description', milestone.get('description'))
 
             event.add('dtstart', dtstart.date())
@@ -69,7 +74,8 @@ def ics_file():
 
             event.add('url', milestone.get('html_url'))
 
-            organizer = vCalAddress('MAILTO:%s@users.noreply.github.com' % creator.get('login'))
+            organizer = vCalAddress('MAILTO:%s@users.noreply.github.com' %
+                                    creator.get('login'))
             organizer.params['cn'] = vText(creator.get('login'))
 
             event['organizer'] = organizer
@@ -106,6 +112,7 @@ def authorized(oauth_token):
         print('GitHub authorization failed.')
 
     print('GITHUB_OAUTH_TOKEN=%s' % oauth_token)
+
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
