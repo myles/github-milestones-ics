@@ -16,7 +16,7 @@
       "required": "true"
     },
     "AUTH_PASSWORD": {
-      "description": "The username to authenticate the ICS feed.",,
+      "description": "The username to authenticate the ICS feed.",
       "required": "true",
       "generator": "secret"
     },
